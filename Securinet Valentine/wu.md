@@ -114,3 +114,4 @@ Thì hàm flat() đại loại sẽ pack() các dữ liệu mình vào thay vì 
 ![image](https://user-images.githubusercontent.com/111769169/219421953-30160aa1-251b-46ee-a5fc-f375dab9b0b7.png)
 
 # Gift shellcode
+file: [giftshellcode](https://github.com/wan-hyhty/CTFs_competition/blob/main/Securinet%20Valentine/source/giftshell)
