@@ -98,10 +98,10 @@ ___
 ![image](https://user-images.githubusercontent.com/111769169/219417932-fa686178-6ecd-49ca-98e9-90ba49b03023.png)
 > tính base của libc
 ___
-> ta thực hiện lại lần hai chương trình và đẩy hàm system vào
-![image](https://user-images.githubusercontent.com/111769169/219418602-1513688e-6841-4c30-bee9-fced04860c5d.png)
-> ở đây địa 0x40101a được thêm vào để khắc phục lỗi xmm1 (lúc em làm thì em hum có dòng này =)))
-> em đã thử không thêm địa chỉ này mà nhảy sâu vào hàm system nhưng vẫn không khắc phục được lỗi xmm1
+> ta thực hiện lại lần hai chương trình và đẩy hàm system vào  
+![image](https://user-images.githubusercontent.com/111769169/219418602-1513688e-6841-4c30-bee9-fced04860c5d.png)  
+> ở đây địa 0x40101a được thêm vào để khắc phục lỗi xmm1 (lúc em làm thì em hum có dòng này =)))  
+> em đã thử không thêm địa chỉ này mà nhảy sâu vào hàm system nhưng vẫn không khắc phục được lỗi xmm1  
 ___
 #### Tổng kết sai sót
 Không theo dõi thông báo giải và lúc được biết có file mới thì vẫn giải trên file cũ. Kết quả là file libc khác với server  
