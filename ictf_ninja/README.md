@@ -1,5 +1,4 @@
 # Gainme
-
 <details>
 <summary> Gainme </summary>
  
@@ -39,3 +38,17 @@ p.interactive()
 để đổi 1 số âm sang hex ta có thể p32(-10000, sign = True)
 
  </details>
+
+# babyFlow
+
+  ta thấy hàm gets có thể đoán được nó có BOF
+  ![image](https://user-images.githubusercontent.com/111769169/219847378-e4e3ddf8-5d26-4c29-8942-f3b0ddbb0e23.png)
+  ___
+  ở đây ta hàm strcpy() sẽ lấy chuỗi ta nhập vào và copy vào dest, mà dest cũng chỉ có 16byte và có hàm thực thi /bin/sh nên ta có thể BOF 
+  ![image](https://user-images.githubusercontent.com/111769169/219847745-1b1e755a-971c-4086-9ec8-1886b295ecc9.png)
+  bây giờ ta tìm offset để ret2win là 24  
+  ![image](https://user-images.githubusercontent.com/111769169/219847816-83e0ff9c-1b99-4f52-9f4a-9be9adb00317.png)
+  
+```python3
+
+```
