@@ -59,3 +59,25 @@ q
 picoCTF{M4K3_5UR3_70_CH3CK_Y0UR_1NPU75_1B9F5942}
 ```
 </details>
+
+<details> <summary> buffer overflow 0 </summary>
+  
+  từ file C ta thấy trong hàm main có biến buf[100]  
+  ```c
+   char buf1[100];
+  gets(buf1); 
+  vuln(buf1);
+  ```  
+  nhưng trong hàm vuln chỉ được khai báo 16byte  
+  ```c
+  void vuln(char *input){
+  char buf2[16];
+  strcpy(buf2, input);
+}
+  ```
+  từ đây ta có thể thấy lỗi BOF
+  ```
+  Input: aaaaaaaaaaaaaaaaaaaaaaaa
+  picoCTF{ov3rfl0ws_ar3nt_that_bad_a065d5d9}
+  ```
+</details>
