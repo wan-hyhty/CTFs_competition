@@ -127,4 +127,8 @@ r.interactive()
 
 </details>
 
+# symtem("/bin/date") -> symtem("/bin/sh")
+> cách này mình đã làm trong 1 bài nào đó của BUUCTF của các pháp sư trung hoa =)))
+
+* ý tưởng thì như tên của nó =)))
 
