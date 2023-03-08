@@ -56,6 +56,7 @@ nhưng không sao, ta sẽ tính tay.
 ___
 Đầu tiên ta sẽ tính địa chỉ base libc 
 
+![image](https://user-images.githubusercontent.com/111769169/223641357-b1530364-a813-4f70-a4be-a797fe7975bb.png)
 
 
 
