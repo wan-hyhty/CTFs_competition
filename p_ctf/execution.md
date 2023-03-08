@@ -129,7 +129,6 @@ r.interactive()
 </details>
 
 # cách 2:
-> do người ta có hàm system trong file rồi nên ta có thể nhảy vào hàm system lun
 
 <details> <summary> script </summary> 
 
