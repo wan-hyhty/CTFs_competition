@@ -30,7 +30,7 @@ int __cdecl main(int argc, const char **argv, const char **envp)
     PIE:      No PIE (0x400000)
 ```
 
-##### thông qua ida và checksec, ta có thể đoán được là ret2libc
+#### thông qua ida và checksec, ta có thể đoán được là ret2libc
 > hàm system bài này không có sẵn trong file, có trong file libc trên sever
 
 # ret2libc
