@@ -30,7 +30,8 @@ int __cdecl main(int argc, const char **argv, const char **envp)
     PIE:      No PIE (0x400000)
 ```
 
-##### thông qua ida và checksec, ta có 2 hướng, 1 là ret2libc , 2 là đổi symtem("/bin/date") thành symtem("/bin/sh")
+##### thông qua ida và checksec, ta có thể đoán được là ret2libc
+> hàm system bài này không có sẵn trong file, có trong file libc trên sever
 
 # ret2libc
 > do trong chương trình có hàm puts nên ta có put@got và put@plt dễ dành leak được libc và tính địa chỉ base.
@@ -126,9 +127,4 @@ r.interactive()
 ```
 
 </details>
-
-# symtem("/bin/date") -> symtem("/bin/sh")
-> cách này mình đã làm trong 1 bài nào đó của BUUCTF của các pháp sư trung hoa =)))
-
-* ý tưởng thì như tên của nó =)))
 
