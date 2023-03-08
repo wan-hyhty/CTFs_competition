@@ -55,3 +55,7 @@ running patchelf on ./exe_patched
 nhưng không sao, ta sẽ tính tay.
 ___
 Đầu tiên ta sẽ tính địa chỉ base libc 
+
+
+
+
