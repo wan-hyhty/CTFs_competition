@@ -31,4 +31,44 @@ int __cdecl main(int argc, const char **argv, const char **envp)
 ```
 
 ## Định hướng
-Sau khi được các anh hint thì ta có lỗi fmt dùng con trỏ stack để thay đổi dữ liệu. Đoạn bug ở đây:
+Em được hint là ow giá trị v4 của while để ta có thể đưa nhiều payload của mình vào.
+Đầu tiên em thấy khi nhập giá trị ở hàm fgets và kiểm tra stack, em thấy dữ liệu nhập vào không lưu trong stack: 
+```c
+───────────────────────────────────────────────────────────────────────────────────────────────────────────── trace ────
+[#0] 0x555555555259 → run_round()
+[#1] 0x5555555552d0 → main()
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+0x007fffffffdc80│+0x0000: 0x007fffffffddc8  →  0x007fffffffe064  →  "/mnt/d/ctf/utctf/printfail"         ← $rsp
+0x007fffffffdc88│+0x0008: 0x007fffffffdca4  →  0x6305730000000001
+0x007fffffffdc90│+0x0010: 0x007fffffffdcb0  →  0x0000000000000001        ← $rbp
+0x007fffffffdc98│+0x0018: 0x005555555552d0  →  <main+60> test eax, eax
+0x007fffffffdca0│+0x0020: 0x0000000100001000
+0x007fffffffdca8│+0x0028: 0x6890f61163057300
+0x007fffffffdcb0│+0x0030: 0x0000000000000001
+0x007fffffffdcb8│+0x0038: 0x007ffff7db5d90  →  <__libc_start_call_main+128> mov edi, eax
+0x007fffffffdcc0│+0x0040: 0x0000000000000000
+0x007fffffffdcc8│+0x0048: 0x00555555555294  →  <main+0> endbr64
+```
+Đến đây em khá bí và xin hint thì được hint là tìm cách thay đổi ret của hàm main là ```c 0x007fffffffdcb8│+0x0038: 0x007ffff7db5d90  →  <__libc_start_call_main+128> mov edi, eax```
+Em nghĩ là mình sẽ tìm địa chỉ stack nào đó có trỏ đến địa chỉ ret để thay đổi thành one_gadget.
+Em tiếp tục tìm nhưng vẫn chưa thấy địa chỉ nào trỏ trực tiếp đến ret
+Bí quá em xin hint và coi lại video 20 thì em thấy ở đây, có thể sử dụng để khai thác: 
+```c
+0x007fffffffdc80│+0x0000: 0x007fffffffddc8  →  0x007fffffffe064  →  "/mnt/d/ctf/utctf/printfail" ,    ← $rsp  //here
+0x007fffffffdc88│+0x0008: 0x007fffffffdca4  →  0x6305730000000001
+0x007fffffffdc90│+0x0010: 0x007fffffffdcb0  →  0x0000000000000001        ← $rbp
+```
+
+thì các bước em khai thác như sau:
+- dùng %n trỏ đến vị trí thứ 6, và ghi đè ```0x007fffffffe064``` thành ```0x007fffffffdcb8``` , khi đó tại ```0x007fffffffddc8``` ta có:
+```c
+0x007fffffffddc8 : 0x007fffffffdcb8  →  0x007ffff7db5d90  →  <__libc_start_call_main+128> mov edi, eax
+```
+- dùng %n trỏ đến vị trí thứ 43 đổi ```0x007fffffffdcb8  →  0x007ffff7db5d90``` thành one_gadget. okela
+
+# Thực thi
+Đầu tiên do file hk có hàm system nên ta sẽ phải leak libc.
+Ta nên chọn vị trí 13 để leak vì nó là save rip của main và theo video 20 chú thích thì save rip nó tỉ lệ đúng hơn vì leak những thằng sau, khi chạy server nó là địa chỉ rác.
+```python
+
+```
