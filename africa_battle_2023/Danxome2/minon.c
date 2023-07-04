@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 #define MINON_SIZE 10
-#define MAX_NAME_SIZE 0x40
+//#define MAX_NAME_SIZE 0x40
 
 typedef struct Awhouangan Awhouangan;
 typedef struct Gbeto Gbeto;
@@ -17,8 +17,7 @@ enum MinonType {
 
 struct Minon
 {
-    speakFunc   
-    ;
+    speakFunc speak;
     enum MinonType type;
     char* name;
 };
@@ -28,10 +27,6 @@ struct Danxome
     int numOfMinon;
     Minon* minons[MINON_SIZE];
 } danxome = { .numOfMinon = 0 };
-
-void Nawi() {
-    system("/bin/sh");
-}
 
 void print(char* str) {
     system("/usr/bin/date +\"%Y/%m/%d %H:%M.%S\" | tr -d '\n'");
@@ -108,20 +103,11 @@ void add_minon() {
     }
 
     minon->speak = speak;
-    print("How long is the name? (max: 64 characters)");   
-    while (1) {
-        printf("> ");
-        scanf("%d", &size);
-        if (size >= 0 && size < MAX_NAME_SIZE) {
-            minon->name = (char*) malloc(size);
-            break;
-        } 
-        printf("??\n");
-    }
+    minon->name = (char*) malloc(0x18);
 
     print("Name of minon?");
     printf("> ");
-    read(0, minon->name, size);
+    read(0, minon->name, 0x18);
 
     danxome.minons[idx] = minon;
     printf("> [DEBUG] Minon is added to Military zone %d\n", idx);
@@ -152,7 +138,7 @@ void remove_minon() {
     }
 
     free(danxome.minons[choice]->name);
-    free(danxome.minons[choice]);               //UAF
+    free(danxome.minons[choice]);
 
     printf("> [DEBUG] Minon is removed from zone %d\n", choice);
     
