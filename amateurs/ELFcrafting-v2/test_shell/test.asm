@@ -1,30 +1,27 @@
-  BITS 32
+		BITS 32
   
-section .text
-
+		org	0x00010000
   
-  ehdr:                                                 ; Elf32_Ehdr
-                db      0x7F, "ELF", 1, 1, 1        ;   e_ident
-_start:     mov    ebx, msg
-            mov    al, 0xb
-            int    0x80
-                dw      2                               ;   e_type
-                dw      3                               ;   e_machine
-                dd      1                               ;   e_version
-                dd      _start                          ;   e_entry
-                dd      phdr - $$               ; e_phoff
-  phdr:         dd      1                       ; e_shoff       ; p_type
-                dd      0                       ; e_flags       ; p_offset
-                dd      $$                      ; e_ehsize      ; p_vaddr
-                                                ; e_phentsize
-                dw      1                       ; e_phnum       ; p_paddr
-                dw      0                       ; e_shentsize
-                dd      filesize                ; e_shnum       ; p_filesz
-                                                ; e_shstrndx
-                dd      filesize                                ; p_memsz
-                dd      5                                       ; p_flags
-                dd      0x1000                                  ; p_align
+		db	0x7F, "ELF"
+		dd	1
+		dd	0
+		dd	$$
+		dw	2
+		dw	3
+		dd	_start
+		dd	_start
+		dd	4
+_start:	mov	al,	11
+        jmp	next
+		nop
+		nop
+		nop
+		db	0
+		dw	0x34
+		dw	0x20
+		dd	1
+next:	mov	ebx,	bin_sh
+        int	0x80
+bin_sh:	db	"/bin/sh", 0
   
-  filesize      equ     $ - $$
-SECTION .data
-    msg db "/bin/sh"
+filesize	equ	$ - $$

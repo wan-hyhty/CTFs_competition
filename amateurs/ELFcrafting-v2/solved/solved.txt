@@ -1,0 +1,2 @@
+https://www.muppetlabs.com/~breadbox/software/tiny/teensy.html
+https://amateurs.team/writupes/AmateursCTF-2023/ELFcrafting-v2

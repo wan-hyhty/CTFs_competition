@@ -2,9 +2,9 @@
 
 from pwn import *
 
-exe = ELF("./test_patched")
+exe = ELF("./chall_patched")
 libc = ELF("./libc.so.6")
-ld = ELF("./ld-2.37.so")
+ld = ELF("./ld-2.35.so")
 
 context.binary = exe
 
