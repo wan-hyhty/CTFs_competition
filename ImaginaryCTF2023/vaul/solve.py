@@ -68,12 +68,13 @@ ciphertext = bytes.fromhex(b''.join(p.recvline(False).split()).decode())
 with open("cipher.txt", "wb+") as fp:
     fp.write(ciphertext)
 
-os.system("./aes A")
+os.system("./test A")
 
 with open("IV.txt", "rb") as fp:
     IV = fp.read()
 
-print(IV)
+for i in IV:
+    print(hex(i)[1:], end="")
 
 encrypt_flag()
 view_secret(0)
@@ -82,7 +83,7 @@ ciphertext = bytes.fromhex(b''.join(p.recvline(False).split()).decode())
 with open("cipher.txt", "wb+") as fp:
     fp.write(ciphertext)
 
-os.system("./aes B")
+os.system("./test B")
 
 with open("plain.txt", "rb") as fp:
     flag = fp.read()

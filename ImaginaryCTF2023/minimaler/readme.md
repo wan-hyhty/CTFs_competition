@@ -1,4 +1,5 @@
 # MINIMALER
+- Được hướng dẫn bởi a Phú
 ## Khai thác
 ### Lần nhập 1
 - Bài này SROP và hơi lạ một xíu và cần debug kĩ

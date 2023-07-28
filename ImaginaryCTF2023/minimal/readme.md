@@ -1,0 +1,1 @@
+Giống bài minimaler

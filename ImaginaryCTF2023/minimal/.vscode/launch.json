@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/mnt/d/CTF/ImaginaryCTF2023/vaul",
-      "program": "/mnt/d/CTF/ImaginaryCTF2023/vaul/build/Debug/outDebug",
+      "cwd": "/mnt/d/CTF/ImaginaryCTF2023/minimal",
+      "program": "/mnt/d/CTF/ImaginaryCTF2023/minimal/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
