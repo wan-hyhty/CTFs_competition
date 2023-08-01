@@ -1,0 +1,14 @@
+syntax = "proto3";
+option go_package = "internal/ue/pb";
+
+message Loc {
+    string  position = 1;
+}
+
+message Response {
+}
+
+
+service Location {
+    rpc UpdateLocation(Loc) returns (Response);
+}

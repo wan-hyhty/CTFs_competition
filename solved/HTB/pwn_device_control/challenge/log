@@ -1,0 +1,4 @@
+# Nmap 7.93 scan initiated Sat Jul 15 14:23:55 2023 as: /snap/nmap/3077/usr/bin/nmap -sC -sV -T4 -A -p- --vv -oN ./log 10.129.249.105
+Nmap scan report for 10.129.249.105 [host down, received no-response]
+Read data files from: /snap/nmap/3077/usr/bin/../share/nmap
+# Nmap done at Sat Jul 15 14:23:59 2023 -- 1 IP address (0 hosts up) scanned in 3.54 seconds

@@ -1,0 +1,2 @@
+flag = chr(0x8F) + chr(0x60) + chr(0x45) + chr(0x8C)
+print(flag);

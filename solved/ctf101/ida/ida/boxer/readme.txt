@@ -1,0 +1,1 @@
+You've received a second executable file in your defence against the dark arts class. This one can't be solved with the strings command, but dogbolt can still be used. Make sure to check the decompiled code with many decompilers since they all differ.

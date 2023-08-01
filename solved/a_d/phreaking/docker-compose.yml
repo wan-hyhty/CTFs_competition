@@ -1,0 +1,120 @@
+version: "3"
+services:
+  phreaking-core:
+    build:
+      context: .
+      target: core
+    ports:
+      - "3399:3399"
+    env_file:
+      - .env
+  phreaking-ue-0:
+    build:
+      context: .
+      target: ue
+    ports:
+      - "6060:6060"
+      - "9930:9930"
+    volumes:
+      - ./data/ue0:/service/data:rw
+    env_file:
+      - .env
+  phreaking-ue-1:
+    build:
+      context: .
+      target: ue
+    ports:
+      - "6061:6060"
+      - "9931:9930"
+    volumes:
+      - ./data/ue1:/service/data:rw
+    env_file:
+      - .env
+  phreaking-ue-2:
+    build:
+      context: .
+      target: ue
+    ports:
+      - "6062:6060"
+      - "9932:9930"
+    volumes:
+      - ./data/ue2:/service/data:rw
+    env_file:
+      - .env
+  phreaking-ue-3:
+    build:
+      context: .
+      target: ue
+    ports:
+      - "6063:6060"
+      - "9933:9930"
+    volumes:
+      - ./data/ue3:/service/data:rw
+    env_file:
+      - .env
+  phreaking-ue-4:
+    build:
+      context: .
+      target: ue
+    ports:
+      - "6064:6060"
+      - "9934:9930"
+    volumes:
+      - ./data/ue4:/service/data:rw
+    env_file:
+      - .env
+  phreaking-ue-5:
+    build:
+      context: .
+      target: ue
+    ports:
+      - "6065:6060"
+      - "9935:9930"
+    volumes:
+      - ./data/ue5:/service/data:rw
+    env_file:
+      - .env
+  phreaking-ue-6:
+    build:
+      context: .
+      target: ue
+    ports:
+      - "6066:6060"
+      - "9936:9930"
+    volumes:
+      - ./data/ue6:/service/data:rw
+    env_file:
+      - .env
+  phreaking-ue-7:
+    build:
+      context: .
+      target: ue
+    ports:
+      - "6067:6060"
+      - "9937:9930"
+    volumes:
+      - ./data/ue7:/service/data:rw
+    env_file:
+      - .env
+  phreaking-ue-8:
+    build:
+      context: .
+      target: ue
+    ports:
+      - "6068:6060"
+      - "9938:9930"
+    volumes:
+      - ./data/ue8:/service/data:rw
+    env_file:
+      - .env
+  phreaking-ue-9:
+    build:
+      context: .
+      target: ue
+    ports:
+      - "6069:6060"
+      - "9939:9930"
+    volumes:
+      - ./data/ue9:/service/data:rw
+    env_file:
+      - .env

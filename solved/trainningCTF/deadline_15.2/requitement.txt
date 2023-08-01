@@ -1,0 +1,12 @@
+Các bạn @Lân AT19 @Lợi - AT19N @Quang AT19N lên trang này xem hết 10 video về kỹ thuật khai thác buffer overflow nha: 
+https://www.youtube.com/playlist?list=PLEvZsp0uc3SEvgL_aZ9dtQ480RAdp6qQM
+Deadline: 23h59, T4, 15/2/2023
+
+Nguồn tài liệu tham khảo cũng như tìm thêm challenge các bạn kiếm thêm ở trên mạng nhé.
+Đây là một số trang mình suggest:
+https://buuoj.cn/
+https://dreamhack.io/
+https://pwn.college/
+https://play.picoctf.org/login
+https://www.root-me.org/                            (Có khá ít wu)
+https://app.hackthebox.com/home          (Xem mục challenge)
