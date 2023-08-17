@@ -1,0 +1,1 @@
+g++ -pthread -fno-stack-protector -no-pie -Wl,-z,norelro -o chall chall.cpp
