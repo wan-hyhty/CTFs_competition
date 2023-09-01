@@ -67,9 +67,9 @@ send()
 ```
 
 - Khi này trong tcache và fastbin như sau
-  ![Alt text](/textsender/bin/image-3.png)
+  ![Alt text](/senkai//textsender/bin/image-3.png)
 - Khi này chunk 9 sẽ là chunk ow bit inuse chunk 0x200 ở dưới
-  ![Alt text](/textsender/bin/image-4.png)
+  ![Alt text](/senkai//textsender/bin/image-4.png)
 - và chunk 6 sẽ là fake chunk
   > Ở đây có lưu ý là cả 2 chunk merge và fake không được ở tcache
 
@@ -84,7 +84,7 @@ send()
 ```
 
 - Khi này ta đã overlap chunk
-  ![Alt text](/textsender/bin/image-5.png)
+  ![Alt text](/senkai//textsender/bin/image-5.png)
 
 ### Leak libc
 - Ta có thể điều khiển 2 con trỏ của chunk 0x20 để leak libc
@@ -110,7 +110,7 @@ sla(b': ', p64(libc.sym.system))
 send()
 ```
 ### Kết quả
-![Alt text](/textsender/bin/image-6.png)
+![Alt text](/senkai//textsender/bin/image-6.png)
 ```python
 #!/usr/bin/python3
 
