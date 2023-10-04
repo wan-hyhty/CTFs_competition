@@ -1,0 +1,45 @@
+0000000000001149 <hash>:
+    1149:	f3 0f 1e fa          	endbr64 
+    114d:	55                   	push   rbp
+    114e:	48 89 e5             	mov    rbp,rsp
+    1151:	48 89 7d d8          	mov    QWORD PTR [rbp-0x28],rdi
+    1155:	66 c7 45 e8 00 00    	mov    WORD PTR [rbp-0x18],0x0
+    115b:	c7 45 ec 00 00 00 00 	mov    DWORD PTR [rbp-0x14],0x0
+    1162:	48 8b 45 d8          	mov    rax,QWORD PTR [rbp-0x28]
+    1166:	48 89 45 f0          	mov    QWORD PTR [rbp-0x10],rax
+    116a:	eb 5f                	jmp    11cb <hash+0x82>
+    116c:	48 8b 45 f0          	mov    rax,QWORD PTR [rbp-0x10]
+    1170:	48 89 45 f8          	mov    QWORD PTR [rbp-0x8],rax
+    1174:	8b 45 ec             	mov    eax,DWORD PTR [rbp-0x14]
+    1177:	83 e0 01             	and    eax,0x1
+    117a:	85 c0                	test   eax,eax
+    117c:	75 22                	jne    11a0 <hash+0x57>
+    117e:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+    1182:	0f b7 00             	movzx  eax,WORD PTR [rax]
+    1185:	66 89 45 ea          	mov    WORD PTR [rbp-0x16],ax
+    1189:	0f b7 45 ea          	movzx  eax,WORD PTR [rbp-0x16]
+    118d:	66 69 c0 06 19       	imul   ax,ax,0x1906
+    1192:	66 89 45 ea          	mov    WORD PTR [rbp-0x16],ax
+    1196:	0f b7 45 ea          	movzx  eax,WORD PTR [rbp-0x16]
+    119a:	66 31 45 e8          	xor    WORD PTR [rbp-0x18],ax
+    119e:	eb 22                	jmp    11c2 <hash+0x79>
+    11a0:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+    11a4:	0f b6 00             	movzx  eax,BYTE PTR [rax]
+    11a7:	88 45 e7             	mov    BYTE PTR [rbp-0x19],al
+    11aa:	0f b6 55 e7          	movzx  edx,BYTE PTR [rbp-0x19]
+    11ae:	89 d0                	mov    eax,edx
+    11b0:	c1 e0 03             	shl    eax,0x3
+    11b3:	01 d0                	add    eax,edx
+    11b5:	01 c0                	add    eax,eax
+    11b7:	88 45 e7             	mov    BYTE PTR [rbp-0x19],al
+    11ba:	0f b6 45 e7          	movzx  eax,BYTE PTR [rbp-0x19]
+    11be:	66 31 45 e8          	xor    WORD PTR [rbp-0x18],ax
+    11c2:	83 45 ec 01          	add    DWORD PTR [rbp-0x14],0x1
+    11c6:	48 83 45 f0 01       	add    QWORD PTR [rbp-0x10],0x1
+    11cb:	48 8b 45 f0          	mov    rax,QWORD PTR [rbp-0x10]
+    11cf:	0f b6 00             	movzx  eax,BYTE PTR [rax]
+    11d2:	84 c0                	test   al,al
+    11d4:	75 96                	jne    116c <hash+0x23>
+    11d6:	0f b7 45 e8          	movzx  eax,WORD PTR [rbp-0x18]
+    11da:	5d                   	pop    rbp
+    11db:	c3                   	ret 

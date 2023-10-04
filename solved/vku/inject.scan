@@ -1,0 +1,4 @@
+# Nmap 7.93 scan initiated Mon Aug  7 14:51:03 2023 as: /snap/nmap/3077/usr/bin/nmap -sV -sC -oG inject.scan y2g0cglu.safecrewglobal.com
+Host: 119.8.168.161 (ecs-119-8-168-161.compute.hwclouds-dns.com)	Status: Up
+Host: 119.8.168.161 (ecs-119-8-168-161.compute.hwclouds-dns.com)	Ports: 22/open/tcp//ssh//OpenSSH 8.9p1 Ubuntu 3ubuntu0.3 (Ubuntu Linux; protocol 2.0)/, 80/open/tcp//http//nginx/, 443/open/tcp//ssl|http//nginx/	Ignored State: filtered (997)
+# Nmap done at Mon Aug  7 14:51:33 2023 -- 1 IP address (1 host up) scanned in 29.49 seconds

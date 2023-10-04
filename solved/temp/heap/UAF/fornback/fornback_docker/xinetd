@@ -1,0 +1,11 @@
+service fornback
+{
+    disable = no
+    type = UNLISTED
+    socket_type = stream
+    protocol = tcp
+    port = 10170
+    wait = no
+    user = Fornback
+    server = /home/Fornback/run.sh
+}

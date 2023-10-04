@@ -1,0 +1,3 @@
+file arm
+set sysroot /usr/aarch64-linux-gnu
+gef-remote -q localhost:9000

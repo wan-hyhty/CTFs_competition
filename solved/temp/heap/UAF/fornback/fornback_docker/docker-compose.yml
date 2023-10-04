@@ -1,0 +1,8 @@
+version: "3"
+services:
+  fornback:
+    build: .
+    ports:
+      - "10170:10170"
+    expose:
+      - "10170"
