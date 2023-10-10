@@ -1,0 +1,139 @@
+version: 2
+jobs:
+  common_linux: &common_linux
+    docker:
+      - image: ghcr.io/openwall/john-ci:fedora.32
+    steps:
+      - checkout
+      - run:
+          name: Building JtR
+          command: .circleci/circle-ci.sh BUILD
+      - run:
+          name: Testing JtR
+          command: .circleci/circle-ci.sh TEST
+          no_output_timeout: 20m
+
+  wine-32bits:
+    <<: *common_linux
+    docker:
+      - image: ghcr.io/openwall/john-ci:fedora.30
+        environment:
+          TARGET_ARCH: "i686"
+          WINE: "wine"
+          OMP_NUM_THREADS: 2
+
+  wine-64bits:
+    <<: *common_linux
+    docker:
+      - image: ghcr.io/openwall/john-ci:fedora.32
+        environment:
+          TARGET_ARCH: "x86_64"
+          WINE: "wine"
+          OMP_NUM_THREADS: 2
+
+  no-plugs:
+    <<: *common_linux
+    docker:
+      - image: claudioandre/john:opencl
+        environment:
+          OMP_NUM_THREADS: 2
+          PLUGS: "none"
+          UNIT_TESTS: "yes"
+          BUILD_OPTS: "--enable-werror CPPFLAGS=-DDYNAMIC_DISABLED"
+
+  encoding-cpu:
+    <<: *common_linux
+    docker:
+      - image: ghcr.io/openwall/john-ci:fedora.32
+        environment:
+          OMP_NUM_THREADS: 2
+          ENCODING_TEST: "cpu"
+
+  encoding-opencl:
+    <<: *common_linux
+    docker:
+      - image: claudioandre/john:opencl
+        environment:
+          OMP_NUM_THREADS: 2
+          ENCODING_TEST: "opencl"
+
+  asan:
+    <<: *common_linux
+    docker:
+      - image: ghcr.io/openwall/john-ci:fedora.32
+        environment:
+          OMP_NUM_THREADS: 2
+          ASAN_TEST: "yes"
+          BUILD_OPTS: "--enable-asan --disable-opencl"
+
+  test-full:
+    <<: *common_linux
+    docker:
+      - image: ghcr.io/openwall/john-ci:fedora.32
+        environment:
+          OMP_NUM_THREADS: 1
+          ASAN_TEST: "yes"
+          FULL_TEST: "yes"
+          BUILD_OPTS: "--enable-asan --disable-openmp --disable-opencl"
+
+  fast-formats-omp:
+    <<: *common_linux
+    docker:
+      - image: ghcr.io/openwall/john-ci:fedora.32
+        environment:
+          OMP_NUM_THREADS: 1
+          ASAN_TEST: "yes"
+          FULL_TEST: "yes"
+          BUILD_OPTS: "--enable-asan --enable-openmp-for-fast-formats --disable-opencl"
+
+  non-SIMD:
+    <<: *common_linux
+    docker:
+      - image: ghcr.io/openwall/john-ci:fedora.32
+        environment:
+          OMP_NUM_THREADS: 2
+          ASAN_TEST: "yes"
+          FULL_TEST: "yes"
+          BUILD_OPTS: "--enable-asan --disable-simd --disable-opencl"
+
+  fast-formats-omp-x-non-SIMD:
+    <<: *common_linux
+    docker:
+      - image: ghcr.io/openwall/john-ci:fedora.32
+        environment:
+          OMP_NUM_THREADS: 2
+          ASAN_TEST: "yes"
+          FULL_TEST: "yes"
+          BUILD_OPTS: "--enable-asan --enable-openmp-for-fast-formats --disable-simd --disable-opencl"
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - asan
+      - encoding-cpu
+      - wine-64bits
+      - no-plugs
+
+      - non-SIMD:
+          requires:
+            - no-plugs
+      - encoding-opencl:
+          requires:
+            - encoding-cpu
+      - wine-32bits:
+          requires:
+            - wine-64bits
+
+      - more-tests:
+          type: approval
+
+      - test-full:
+          requires:
+            - more-tests
+      - fast-formats-omp:
+          requires:
+            - more-tests
+      - fast-formats-omp-x-non-SIMD:
+          requires:
+            - more-tests

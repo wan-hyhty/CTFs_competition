@@ -1,0 +1,267 @@
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Unix-style newlines with a newline ending every file
+[*.{c,h,in,pl,sh,pm,cl}]
+indent_style = tab
+# We don't enforce this for Jumbo, let user decide (that's the beauty of tabs)
+#indent_size = 8
+
+[*.py]
+# Python is a really strange language
+indent_style = space
+indent_size = 4
+
+[doc/*]
+tab_width = 8
+
+# Hashcat guys don't understand the beauty of tabs
+[pp.[ch]]
+indent_style = space
+indent_size = 2
+
+[7z2john.pl]
+indent_style = space
+indent_size = 2
+
+# M4 is a bastard
+[*.{ac,m4}]
+indent_style = space
+indent_size = 2
+
+# Core files best keeping a tab size of 8
+[*.{S,sh}]
+indent_size = 8
+
+[AFS_fmt.h]
+indent_size = 8
+
+[BF_fmt.h]
+indent_size = 8
+
+[BF_std.h]
+indent_size = 8
+
+[BSDI_fmt.h]
+indent_size = 8
+
+[DES_bs.h]
+indent_size = 8
+
+[DES_bs_b.h]
+indent_size = 8
+
+[DES_fmt.h]
+indent_size = 8
+
+[DES_std.h]
+indent_size = 8
+
+[LM_fmt.h]
+indent_size = 8
+
+[MD5_fmt.h]
+indent_size = 8
+
+[MD5_std.h]
+indent_size = 8
+
+[alpha.h]
+indent_size = 8
+
+[arm32le.h]
+indent_size = 8
+
+[batch.h]
+indent_size = 8
+
+[bench.h]
+indent_size = 8
+
+[best.*]
+indent_size = 8
+
+[c3_fmt.h]
+indent_size = 8
+
+[charset.h]
+indent_size = 8
+
+[common.h]
+indent_size = 8
+
+[compiler.h]
+indent_size = 8
+
+[config.h]
+indent_size = 8
+
+[cracker.h]
+indent_size = 8
+
+[crc32.h]
+indent_size = 8
+
+[detect.h]
+indent_size = 8
+
+[dummy.h]
+indent_size = 8
+
+[external.h]
+indent_size = 8
+
+[formats.h]
+indent_size = 8
+
+[getopt.h]
+indent_size = 8
+
+[ia64.h]
+indent_size = 8
+
+[idle.h]
+indent_size = 8
+
+[inc.h]
+indent_size = 8
+
+[john.asm]
+indent_size = 8
+end_of_line = crlf
+
+[john.h]
+indent_size = 8
+
+[list.h]
+indent_size = 8
+
+[loader.h]
+indent_size = 8
+
+[logger.h]
+indent_size = 8
+
+[math.h]
+indent_size = 8
+
+[memory.h]
+indent_size = 8
+
+[mic.h]
+indent_size = 8
+
+[mips32.h]
+indent_size = 8
+
+[mips64.h]
+indent_size = 8
+
+[misc.h]
+indent_size = 8
+
+[nonstd.h]
+indent_size = 8
+
+[options.h]
+indent_size = 8
+
+[os.h]
+indent_size = 8
+
+[pa-risc.h]
+indent_size = 8
+
+[params.h]
+indent_size = 8
+
+[path.h]
+indent_size = 8
+
+[ppc32.h]
+indent_size = 8
+
+[ppc32alt.h]
+indent_size = 8
+
+[ppc64.h]
+indent_size = 8
+
+[ppc64alt.h]
+indent_size = 8
+
+[recovery.h]
+indent_size = 8
+
+[rpp.h]
+indent_size = 8
+
+[rules.h]
+indent_size = 8
+
+[sboxes-s.h]
+indent_size = 8
+
+[sboxes.h]
+indent_size = 8
+
+[signals.h]
+indent_size = 8
+
+[single.h]
+indent_size = 8
+
+[sparc32.h]
+indent_size = 8
+
+[sparc64.h]
+indent_size = 8
+
+[status.h]
+indent_size = 8
+
+[symlink.h]
+indent_size = 8
+
+[times.h]
+indent_size = 8
+
+[trip_fmt.h]
+indent_size = 8
+
+[tty.h]
+indent_size = 8
+
+[unafs.h]
+indent_size = 8
+
+[unique.h]
+indent_size = 8
+
+[unshadow.h]
+indent_size = 8
+
+[vax.h]
+indent_size = 8
+
+[wordlist.h]
+indent_size = 8
+
+[x86-64.h]
+indent_size = 8
+
+[x86-any.h]
+indent_size = 8
+
+[x86-mmx.h]
+indent_size = 8
+
+[x86-sse.h]
+indent_size = 8
