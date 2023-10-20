@@ -1,0 +1,32 @@
+import struct
+
+def build_handshake_packet(database, username, password):
+    # Số phiên bản MySQL
+    protocol_version = 10
+
+    # Phiên bản MySQL
+    server_version = '8.0.26'
+
+    # Tạo handshake packet
+    handshake_packet = struct.pack('<B', protocol_version)  # Protocol version
+    handshake_packet += server_version.encode('utf-8') + b'\x00'  # MySQL server version
+    handshake_packet += struct.pack('<I', 123456789)  # Connection ID
+    handshake_packet += b'\x00' * 8  # Reserved bytes
+    handshake_packet += b'\x08'  # Capability flags (CLIENT_PROTOCOL_41)
+    handshake_packet += b'\x00\x00'  # Character set (default)
+    handshake_packet += b'\x02\x00'  # Status flags
+    handshake_packet += b'\x00\x00' * 13  # Reserved bytes
+    handshake_packet += database.encode('utf-8') + b'\x00'  # Database name
+    handshake_packet += username.encode('utf-8') + b'\x00'  # Username
+    handshake_packet += struct.pack('B', len(password)) + password.encode('utf-8')  # Password
+
+    return handshake_packet
+
+# Thông tin từ biến môi trường
+MYSQL_DATABASE = 'fl4g'
+MYSQL_USER = 'isitdtu'
+MYSQL_PASSWORD = 'qp37RWf@@Ygvd@'
+
+handshake_packet = build_handshake_packet(MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD)
+print(handshake_packet)
+print(len(handshake_packet))
